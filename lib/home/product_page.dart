@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:grow_fast/home/productDetailPage.dart';
 
+import '../components/gridview_products.dart';
 import '../components/horizontal_products.dart';
 import '../model/product_model.dart';
 import '../repository/get_info.dart';
@@ -38,7 +41,11 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Products"),
+        backgroundColor: Color(0xffF1F4F3),
+        title: Text(
+          "Products",
+          style: GoogleFonts.raleway(color: Colors.black),
+        ),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -52,7 +59,7 @@ class _ProductPageState extends State<ProductPage> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 16, horizontal: 24),
                         shrinkWrap: true,
-                        itemCount: lifOfCategory?.length??0,
+                        itemCount: lifOfCategory?.length ?? 0,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           return Container(
@@ -61,7 +68,8 @@ class _ProductPageState extends State<ProductPage> {
                                   borderRadius: BorderRadius.circular(16),
                                   color: Style.bgCategory),
                               padding: const EdgeInsets.all(8),
-                              child: Center(child: Text(lifOfCategory?[index]??'')));
+                              child: Center(
+                                  child: Text(lifOfCategory?[index] ?? '')));
                         }),
                   ),
                   Padding(
@@ -69,36 +77,55 @@ class _ProductPageState extends State<ProductPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text("All Product"),
+                        Text(
+                          "All Products",
+                          style: Style.textStyleofTitle(size: 20),
+                        ),
                         IconButton(
                             onPressed: () {
                               isHorizontal = !isHorizontal;
                               setState(() {});
                             },
-                            icon: Icon(isHorizontal ? Icons.menu : Icons.list))
+                            icon: Icon(
+                              isHorizontal
+                                  ? Icons.grid_view_outlined
+                                  : Icons.list,
+                              color: Color(0xff194B38),
+                            ))
                       ],
                     ),
                   ),
                   isHorizontal
-                      ? ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: lifOfProduct?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return HorizontalProduct(
-                                product: lifOfProduct?[index]);
+                      ? GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: ((context) => ProductDetail())));
                           },
+                          child: ListView.builder(
+                            padding: EdgeInsets.only(top: 23),
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: lifOfProduct?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              return HorizontalProduct(
+                                  product: lifOfProduct?[index]);
+                            },
+                          ),
                         )
                       : GridView.builder(
+                          padding: EdgeInsets.only(top: 20),
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: lifOfProduct?.length ?? 0,
                           gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2),
-                          itemBuilder: (context, index) => Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Placeholder(),
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                            mainAxisSpacing: 18,
+                            crossAxisSpacing: 17,
+                            maxCrossAxisExtent: 300,
+                            mainAxisExtent: 280,
+                          ),
+                          itemBuilder: (context, index) => GridProduct(
+                                product: lifOfProduct?[index],
                               )),
                 ],
               ),
