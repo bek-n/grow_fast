@@ -41,6 +41,8 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 110,
+        scrolledUnderElevation: 50,
         backgroundColor: Color(0xffF1F4F3),
         title: Text(
           "Products",
@@ -96,21 +98,22 @@ class _ProductPageState extends State<ProductPage> {
                     ),
                   ),
                   isHorizontal
-                      ? GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: ((context) => ProductDetail())));
+                      ? ListView.builder(
+                          padding: EdgeInsets.only(top: 23),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: lifOfProduct?.length ?? 0,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: ((context) => ProductDetail(
+                                        product: lifOfProduct?[index]))));
+                              },
+                              child: HorizontalProduct(
+                                  product: lifOfProduct?[index]),
+                            );
                           },
-                          child: ListView.builder(
-                            padding: EdgeInsets.only(top: 23),
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: lifOfProduct?.length ?? 0,
-                            itemBuilder: (context, index) {
-                              return HorizontalProduct(
-                                  product: lifOfProduct?[index]);
-                            },
-                          ),
                         )
                       : GridView.builder(
                           padding: EdgeInsets.only(top: 20),

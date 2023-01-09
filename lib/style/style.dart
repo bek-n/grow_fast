@@ -11,6 +11,8 @@ abstract class Style {
   static const white = Colors.white;
   static const black = Colors.black;
   static const bgCategory = Color(0xffEBF1F4);
+  static const bgDetailProduct = Color(0xffC4C4C4);
+
   static Color shimmerBase = Colors.grey.shade300;
   static Color bgOfproductsContainer = Color(0xffF1F4F3);
   static const colorOftitle = Color(0xff194B38);
@@ -18,12 +20,15 @@ abstract class Style {
 
   // ---------- Text   ---------- //
 
-  static textStyleofTitle({double size = 15, Color textColor = colorOftitle}) =>
-      GoogleFonts.raleway(fontSize: size, fontWeight: FontWeight.w700);
+  static textStyleofTitle({
+    double size = 15,
+  }) =>
+      GoogleFonts.raleway(
+          fontSize: size, fontWeight: FontWeight.w700, color: colorOftitle);
 
   static textStyleofPrice({
     double size = 24,
-    Color textColor = colorOfPrice,
   }) =>
-      GoogleFonts.montserrat(fontSize: size, fontWeight: FontWeight.w600);
+      GoogleFonts.montserrat(
+          fontSize: size, fontWeight: FontWeight.w600, color: colorOfPrice);
 }
