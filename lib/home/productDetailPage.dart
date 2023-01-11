@@ -15,15 +15,17 @@ class ProductDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ProductDetail> {
   bool isLike = true;
+  int amount = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Style.bgDetailProduct,
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: MediaQuery.of(context).size.height / 2,
+            height: MediaQuery.of(context).size.height / 1.8,
             width: double.infinity,
             decoration: BoxDecoration(
               color: Style.white,
@@ -98,9 +100,143 @@ class _ProductDetailState extends State<ProductDetail> {
             padding: const EdgeInsets.only(left: 29),
             child: Text(
               widget.product?.title ?? "",
-              style: Style.textStyleofTitle(size: 28),
+              style: Style.textStyleofTitle(size: 24),
             ),
-          )
+          ),
+          25.verticalSpace,
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 29),
+                child: Container(
+                  width: 70.w,
+                  height: 32.h,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      border: Border.all(color: Color(0xffE4E2E2))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.star,
+                        color: Colors.yellow,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5),
+                        child: Text(
+                            widget.product?.rating?.rate.toString() ?? '',
+                            style: Style.textStyleofPrice(size: 12)),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Container(
+                  width: 140.w,
+                  height: 32.h,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(100)),
+                      border: Border.all(color: Color(0xffE4E2E2))),
+                  child: Center(
+                    child: Text(widget.product?.category ?? '',
+                        style: Style.textStyleofPrice(size: 12)),
+                  ),
+                ),
+              ),
+              Spacer(),
+              Text(
+                '\$',
+                style: Style.textStyleofPrice(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 50),
+                child: Text(
+                  widget.product?.price.toString() ?? '',
+                  style: Style.textStyleofPrice(),
+                ),
+              )
+            ],
+          ),
+          25.verticalSpace,
+          Padding(
+            padding: const EdgeInsets.only(left: 29),
+            child: Text(
+              'Description',
+              style: Style.textStyleofTitle(size: 20),
+            ),
+          ),
+          10.verticalSpace,
+          SizedBox(
+              height: 40,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 29, right: 48),
+                child: Text(
+                  widget.product?.description ?? '',
+                  style: Style.textStyleofTitle(size: 12),
+                ),
+              )),
+          Spacer(),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Container(
+                  height: 40.h,
+                  width: 40.w,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                      color: Style.white),
+                  child: Center(
+                      child: Text(
+                    '-',
+                    style: Style.textStyleofPrice(size: 22),
+                  )),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  '$amount',
+                  style: Style.textStyleofPrice(size: 20),
+                ),
+              ),
+              Container(
+                height: 40.h,
+                width: 40.w,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    color: Style.white),
+                child: Center(
+                    child: Text(
+                  '+',
+                  style: Style.textStyleofPrice(size: 30),
+                )),
+              ),
+              Spacer(),
+              Container(
+                height: 82.h,
+                width: 196.w,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [Color(0xff26AD71), Color(0xff32CB4B)]),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(28),
+                    )),
+                child: Center(
+                    child: Text(
+                  'Add to bag',
+                  style: TextStyle(
+                      color: Style.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600),
+                )),
+              )
+            ],
+          ),
         ],
       ),
     );

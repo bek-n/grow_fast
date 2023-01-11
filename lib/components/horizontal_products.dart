@@ -49,15 +49,12 @@ class _HorizontalProductState extends State<HorizontalProduct> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 7),
-                      child: Text(
-                        ('\$ ${widget.product?.price ?? 0}').toString(),
-                        style: Style.textStyleofPrice(),
-                      ),
+                    Text(
+                      ('\$ ${widget.product?.price ?? 0}').toString(),
+                      style: Style.textStyleofPrice(),
                     ),
                     Container(
-                      width: 53.w,
+                      width: 50.w,
                       height: 41.h,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(

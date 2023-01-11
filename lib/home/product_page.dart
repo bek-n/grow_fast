@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:grow_fast/home/productDetailPage.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 import '../components/gridview_products.dart';
 import '../components/horizontal_products.dart';
@@ -20,6 +23,8 @@ class _ProductPageState extends State<ProductPage> {
   List<dynamic>? lifOfCategory = [];
   bool isLoading = true;
   bool isHorizontal = true;
+  bool isLoadingCateg = false;
+  int selected = -1;
 
   @override
   void initState() {
@@ -29,19 +34,36 @@ class _ProductPageState extends State<ProductPage> {
 
   getInformation() async {
     isLoading = true;
-    lifOfProduct = await GetInfo.getProduct();
+    setState(() {});
+
     lifOfCategory = await GetInfo.getCategory();
+    await getAllProducts();
     isLoading = false;
     setState(() {});
   }
 
-  getProduct() {}
+  getAllProducts() async {
+    isLoading = true;
+    setState(() {});
+    lifOfProduct = await GetInfo.getProduct();
+    isLoading = false;
+    setState(() {});
+  }
+
+  getCategory(String categ) async {
+    isLoadingCateg = true;
+    setState(() {});
+    lifOfProduct = await GetInfo.getCategoryONlyOne(oneItem: categ);
+
+    isLoadingCateg = false;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 110,
+        // toolbarHeight: 100,
         scrolledUnderElevation: 50,
         backgroundColor: Color(0xffF1F4F3),
         title: Text(
@@ -50,7 +72,9 @@ class _ProductPageState extends State<ProductPage> {
         ),
       ),
       body: isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+              child: LoadingAnimationWidget.inkDrop(
+                  color: Color.fromARGB(255, 113, 111, 111), size: 35))
           : SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,14 +88,32 @@ class _ProductPageState extends State<ProductPage> {
                         itemCount: lifOfCategory?.length ?? 0,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return Container(
-                              margin: const EdgeInsets.only(right: 8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(16),
-                                  color: Style.bgCategory),
-                              padding: const EdgeInsets.all(8),
-                              child: Center(
-                                  child: Text(lifOfCategory?[index] ?? '')));
+                          return GestureDetector(
+                            onTap: () async {
+                              if (selected == index) {
+                                selected = -1;
+                                await getAllProducts();
+
+                                setState(() {});
+                              } else {
+                                selected = index;
+                                getCategory(lifOfCategory?[index]);
+                                setState(() {});
+                              }
+                            },
+                            child: Container(
+                                margin: const EdgeInsets.only(right: 8),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: selected == index
+                                            ? Color(0xff2AAF7F)
+                                            : Colors.transparent),
+                                    borderRadius: BorderRadius.circular(16),
+                                    color: Style.bgCategory),
+                                padding: const EdgeInsets.all(8),
+                                child: Center(
+                                    child: Text(lifOfCategory?[index] ?? ''))),
+                          );
                         }),
                   ),
                   Padding(
@@ -97,39 +139,71 @@ class _ProductPageState extends State<ProductPage> {
                       ],
                     ),
                   ),
-                  isHorizontal
-                      ? ListView.builder(
-                          padding: EdgeInsets.only(top: 23),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: lifOfProduct?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: ((context) => ProductDetail(
-                                        product: lifOfProduct?[index]))));
+                  isLoadingCateg
+                      ? Shimmer(
+                          interval: Duration(seconds: 1),
+                          color: Color.fromARGB(255, 113, 111, 111),
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: lifOfProduct?.length ?? 0,
+                              itemBuilder: ((context, index) => Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 30),
+                                  child: Container(
+                                    width: 320.w,
+                                    height: 120.h,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(24),
+                                        color: Style.bgOfproductsContainer),
+                                    padding: const EdgeInsets.all(16),
+                                    margin: const EdgeInsets.only(bottom: 17),
+                                  )))))
+                      : isHorizontal
+                          ? ListView.builder(
+                              padding: EdgeInsets.only(top: 23),
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: lifOfProduct?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: ((context) =>
+                                                ProductDetail(
+                                                    product: lifOfProduct?[
+                                                        index]))));
+                                  },
+                                  child: HorizontalProduct(
+                                      product: lifOfProduct?[index]),
+                                );
                               },
-                              child: HorizontalProduct(
-                                  product: lifOfProduct?[index]),
-                            );
-                          },
-                        )
-                      : GridView.builder(
-                          padding: EdgeInsets.only(top: 20),
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: lifOfProduct?.length ?? 0,
-                          gridDelegate:
-                              SliverGridDelegateWithMaxCrossAxisExtent(
-                            mainAxisSpacing: 18,
-                            crossAxisSpacing: 17,
-                            maxCrossAxisExtent: 300,
-                            mainAxisExtent: 280,
-                          ),
-                          itemBuilder: (context, index) => GridProduct(
-                                product: lifOfProduct?[index],
-                              )),
+                            )
+                          : GridView.builder(
+                              padding: EdgeInsets.only(top: 20),
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: lifOfProduct?.length ?? 0,
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                mainAxisSpacing: 18,
+                                crossAxisSpacing: 17,
+                                maxCrossAxisExtent: 300,
+                                mainAxisExtent: 280,
+                              ),
+                              itemBuilder: (context, index) => GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: ((context) =>
+                                                  ProductDetail(
+                                                      product: lifOfProduct?[
+                                                          index]))));
+                                    },
+                                    child: GridProduct(
+                                      product: lifOfProduct?[index],
+                                    ),
+                                  )),
                 ],
               ),
             ),

@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import '../model/category_model.dart';
+
 import '../model/product_model.dart';
 
 abstract class GetInfo {
@@ -31,6 +31,18 @@ abstract class GetInfo {
     }
     return [];
   }
+
+  static Future<List<ProductModel?>?>getCategoryONlyOne({required String oneItem}) async {
+    try {
+      final url = Uri.parse("https://fakestoreapi.com/products/category/$oneItem");
+      final res = await http.get(url);
+      return productModelFromJson(res.body);
+    } catch (e) {
+      print('xattto');
+    }
+    return [];
+  }
+
 
 }
 
