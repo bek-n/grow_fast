@@ -1,8 +1,7 @@
-
 import 'dart:convert';
 
+import 'package:grow_fast/model/newProducts.dart';
 import 'package:http/http.dart' as http;
-
 
 import '../model/product_model.dart';
 
@@ -20,8 +19,7 @@ abstract class GetInfo {
     return null;
   }
 
-
-   static Future<List> getCategory() async {
+  static Future<List> getCategory() async {
     try {
       final url = Uri.parse("https://fakestoreapi.com/products/categories");
       final res = await http.get(url);
@@ -32,9 +30,11 @@ abstract class GetInfo {
     return [];
   }
 
-  static Future<List<ProductModel?>?>getCategoryONlyOne({required String oneItem}) async {
+  static Future<List<ProductModel?>?> getCategoryONlyOne(
+      {required String oneItem}) async {
     try {
-      final url = Uri.parse("https://fakestoreapi.com/products/category/$oneItem");
+      final url =
+          Uri.parse("https://fakestoreapi.com/products/category/$oneItem");
       final res = await http.get(url);
       return productModelFromJson(res.body);
     } catch (e) {
@@ -42,11 +42,20 @@ abstract class GetInfo {
     }
     return [];
   }
-
-
 }
 
+abstract class GetInfoNew {
+  GetInfoNew._();
 
-
-
-
+  static Future<NoteModel?> getProductNew(int pageIndex) async {
+    try {
+      final url =
+          Uri.parse("https://zohiddev.uz/v1/products?limit=4&page=$pageIndex");
+      final res = await http.get(url);
+      return noteModelFromJson(res.body);
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+}
