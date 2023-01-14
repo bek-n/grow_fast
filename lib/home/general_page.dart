@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:grow_fast/home/persons_page.dart';
 import 'package:grow_fast/home/profile_page.dart';
 import 'package:grow_fast/style/style.dart';
+import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
 
 import 'card_page.dart';
 import 'product_page.dart';
@@ -28,21 +29,27 @@ class _GeneralPageState extends State<GeneralPage> {
         body: Pages[selectedIndex],
         bottomNavigationBar: Scaffold(
             body: Pages[selectedIndex],
-            bottomNavigationBar: ConvexAppBar(
-              backgroundColor: Style.white,
-              onTap: (value) {
+            bottomNavigationBar: WaterDropNavBar(
+              waterDropColor: Style.colorOfPrice,
+              inactiveIconColor: Colors.grey,
+              backgroundColor: Color(0xffF1F4F3),
+              onItemSelected: (value) {
                 selectedIndex = value;
                 setState(() {});
               },
-              color: Style.greyColor,
-              activeColor: Color(0xff32CB4B),
-              items: [
-                TabItem(icon: Icon(Icons.home), title: 'Home'),
-                TabItem(
-                    icon: Icon(Icons.shopping_cart_checkout_outlined),
-                    title: 'Cart'),
-                TabItem(icon: Icon(Icons.group), title: 'Persons'),
-                TabItem(icon: Icon(Icons.person), title: 'Profile'),
+              selectedIndex: selectedIndex,
+              barItems: [
+                BarItem(
+                    filledIcon: Icons.home, outlinedIcon: Icons.home_outlined),
+                BarItem(
+                    filledIcon: Icons.shopping_cart_checkout_outlined,
+                    outlinedIcon: Icons.shopping_cart_checkout),
+                BarItem(
+                    filledIcon: Icons.group,
+                    outlinedIcon: Icons.group_outlined),
+                BarItem(
+                    filledIcon: Icons.person,
+                    outlinedIcon: Icons.person_outline),
               ],
             )));
   }

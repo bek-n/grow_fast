@@ -100,10 +100,31 @@ class _PersonsPageState extends State<PersonsPage> {
                                     color: Style.bgOfproductsContainer),
                                 padding: const EdgeInsets.all(16),
                                 margin: const EdgeInsets.only(bottom: 17),
-                                child: Column(
+                                child: Row(
                                   children: [
-                                    Text(
-                                        '${lifOfProduct?.products?[index]?.name}')
+                                    Container(
+                                      height: 100.h,
+                                      width: 100.h,
+                                      decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                              image: NetworkImage(
+                                                  '${lifOfProduct?.products?[index]?.image}'),
+                                              fit: BoxFit.cover)),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${lifOfProduct?.products?[index]?.name}',
+                                          style: Style.textStyleofTitle(),
+                                        ),
+                                        10.verticalSpace,
+                                        Text(
+                                            '\$ ${lifOfProduct?.products?[index]?.price}',
+                                            style: Style.textStyleofPrice()),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),

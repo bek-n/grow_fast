@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grow_fast/style/style.dart';
+import 'package:readmore/readmore.dart';
 
 import '../components/image_network.dart';
 import '../model/product_model.dart';
@@ -25,7 +26,7 @@ class _ProductDetailState extends State<ProductDetail> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: MediaQuery.of(context).size.height / 1.8,
+            height: MediaQuery.of(context).size.height / 1.9,
             width: double.infinity,
             decoration: BoxDecoration(
               color: Style.white,
@@ -168,15 +169,17 @@ class _ProductDetailState extends State<ProductDetail> {
             ),
           ),
           10.verticalSpace,
-          SizedBox(
-              height: 40,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 29, right: 48),
-                child: Text(
-                  widget.product?.description ?? '',
-                  style: Style.textStyleofTitle(size: 12),
-                ),
-              )),
+          Padding(
+            padding: const EdgeInsets.only(left: 29, right: 48),
+            child: ReadMoreText(
+              trimCollapsedText: ' show more',
+              trimExpandedText: ' show less',
+              trimMode: TrimMode.Line,
+              trimLines: 4,
+              widget.product?.description ?? '',
+              style: Style.textStyleofTitle(size: 12),
+            ),
+          ),
           Spacer(),
           Row(
             children: [

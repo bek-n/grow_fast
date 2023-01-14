@@ -47,28 +47,19 @@ class _HorizontalProductState extends State<HorizontalProduct> {
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
                       ('\$ ${widget.product?.price ?? 0}').toString(),
                       style: Style.textStyleofPrice(),
                     ),
-                    Container(
-                      width: 50.w,
-                      height: 41.h,
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                              begin: Alignment.topRight,
-                              end: Alignment.bottomLeft,
-                              colors: [Color(0xff26AD71), Color(0xff32CB4B)]),
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20))),
-                      child: Icon(
-                        Icons.add,
-                        color: Colors.white,
-                      ),
-                    )
+                    IconButton(
+                        onPressed: (() {}),
+                        icon: Icon(
+                          Icons.add_circle_outline,
+                          color: Style.colorOfPrice,
+                          size: 30,
+                        ))
                   ],
                 ),
               ],
