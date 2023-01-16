@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../model/product_model.dart';
+import '../store/local.dart';
 import '../style/style.dart';
 import 'image_network.dart';
 
 class HorizontalProduct extends StatefulWidget {
   final ProductModel? product;
+  final VoidCallback onLikeInLikePage;
 
-  HorizontalProduct({Key? key, required this.product}) : super(key: key);
+  HorizontalProduct(
+      {Key? key, required this.product, required this.onLikeInLikePage})
+      : super(key: key);
 
   @override
   State<HorizontalProduct> createState() => _HorizontalProductState();
@@ -25,12 +29,13 @@ class _HorizontalProductState extends State<HorizontalProduct> {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
             color: Style.bgOfproductsContainer),
-        padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.only(bottom: 17),
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(right: 10),
+              padding: const EdgeInsets.only(
+                right: 24,
+              ),
               child: CustomImageNetwork(
                 image: widget.product?.image,
               ),
@@ -39,50 +44,62 @@ class _HorizontalProductState extends State<HorizontalProduct> {
                 child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10, left: 10, top: 20),
-                  child: Text(
-                    widget.product?.title ?? "",
-                    style: Style.textStyleofTitle(),
-                  ),
+                Text(
+                  widget.product?.title ?? "",
+                  style: Style.textStyleofTitle(),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      ('\$ ${widget.product?.price ?? 0}').toString(),
-                      style: Style.textStyleofPrice(),
-                    ),
-                    IconButton(
-                        onPressed: (() {}),
-                        icon: Icon(
-                          Icons.add_circle_outline,
-                          color: Style.colorOfPrice,
-                          size: 30,
-                        ))
-                  ],
+                15.verticalSpace,
+                Text(
+                  ('\$ ${widget.product?.price ?? 0}').toString(),
+                  style: Style.textStyleofPrice(),
                 ),
               ],
             )),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 100),
-              child: GestureDetector(
-                onTap: () {
-                  isLike = !isLike;
-                  setState(() {});
-                },
-                child: Container(
-                  height: 21.h,
-                  width: 21.w,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: isLike ? Colors.white : Colors.red),
-                  child: Icon(
-                    Icons.favorite,
-                    color: isLike ? Colors.red : Colors.white,
-                    size: 12,
+            SizedBox(
+              height: 100,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      if (widget.product?.like ?? false) {
+                        widget.product?.like = !(widget.product?.like ?? false);
+                        LocalStore.removeLikeList(widget.product?.id ?? 0);
+                        widget.onLikeInLikePage();
+                        setState(() {});
+                      } else {
+                        widget.product?.like = !(widget.product?.like ?? false);
+                        LocalStore.setLikeList(widget.product?.id ?? 0);
+                        setState(() {});
+                      }
+                    },
+                    child: Container(
+                      height: 30.h,
+                      width: 30.w,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: (widget.product?.like ?? false)
+                              ? Colors.red
+                              : Colors.white),
+                      child: Icon(
+                        Icons.favorite,
+                        color: (widget.product?.like ?? false)
+                            ? Colors.white
+                            : Colors.red,
+                        size: 15,
+                      ),
+                    ),
                   ),
-                ),
+                  Spacer(),
+                  IconButton(
+                      splashRadius: 5,
+                      onPressed: (() {}),
+                      icon: Icon(
+                        Icons.add_circle_outline,
+                        color: Style.colorOfPrice,
+                        size: 35,
+                      ))
+                ],
               ),
             ),
           ],

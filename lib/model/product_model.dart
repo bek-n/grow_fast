@@ -10,15 +10,15 @@ String productModelToJson(List<ProductModel?>? data) => json.encode(
     data == null ? [] : List<dynamic>.from(data.map((x) => x!.toJson())));
 
 class ProductModel {
-  ProductModel({
-    this.id,
-    this.title,
-    this.price,
-    this.description,
-    this.category,
-    this.image,
-    this.rating,
-  });
+  ProductModel(
+      {this.id,
+      this.title,
+      this.price,
+      this.description,
+      this.category,
+      this.image,
+      this.rating,
+      required this.like});
 
   int? id;
   String? title;
@@ -27,6 +27,7 @@ class ProductModel {
   String? category;
   String? image;
   Rating? rating;
+  bool like;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
         id: json["id"],
@@ -35,6 +36,7 @@ class ProductModel {
         description: json["description"],
         category: json["category"],
         image: json["image"],
+        like: false,
         rating: Rating.fromJson(json["rating"]),
       );
 

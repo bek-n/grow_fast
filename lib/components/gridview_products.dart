@@ -3,11 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:grow_fast/style/style.dart';
 
 import '../model/product_model.dart';
+import '../store/local.dart';
 import 'image_network.dart';
 
 class GridProduct extends StatefulWidget {
   final ProductModel? product;
-  const GridProduct({super.key, required this.product});
+  final VoidCallback onLikeInLikePage;
+
+  GridProduct(
+      {super.key, required this.product, required this.onLikeInLikePage});
 
   @override
   State<GridProduct> createState() => _GridProductState();
@@ -32,18 +36,30 @@ class _GridProductState extends State<GridProduct> {
             padding: const EdgeInsets.only(left: 150),
             child: GestureDetector(
               onTap: () {
-                isLike = !isLike;
-                setState(() {});
+                if (widget.product?.like ?? false) {
+                  widget.product?.like = !(widget.product?.like ?? false);
+                  LocalStore.removeLikeList(widget.product?.id ?? 0);
+                  widget.onLikeInLikePage();
+                  setState(() {});
+                } else {
+                  widget.product?.like = !(widget.product?.like ?? false);
+                  LocalStore.setLikeList(widget.product?.id ?? 0);
+                  setState(() {});
+                }
               },
               child: Container(
                 height: 21.h,
                 width: 21.w,
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: isLike ? Colors.white : Colors.red),
+                    color: (widget.product?.like ?? false)
+                        ? Colors.red
+                        : Colors.white),
                 child: Icon(
                   Icons.favorite,
-                  color: isLike ? Colors.red : Colors.white,
+                  color: (widget.product?.like ?? false)
+                      ? Colors.white
+                      : Colors.red,
                   size: 12,
                 ),
               ),

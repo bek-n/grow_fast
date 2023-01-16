@@ -30,6 +30,20 @@ abstract class GetInfo {
     return [];
   }
 
+
+   static Future<ProductModel?> getSingleProduct(String productId) async {
+    try {
+      final url = Uri.parse("https://fakestoreapi.com/products/$productId");
+      final res = await http.get(url);
+      return ProductModel.fromJson(jsonDecode(res.body));
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+
+
   static Future<List<ProductModel?>?> getCategoryONlyOne(
       {required String oneItem}) async {
     try {
@@ -42,6 +56,19 @@ abstract class GetInfo {
     }
     return [];
   }
+
+
+  static Future<ProductModel?> geIDProduct(int id) async {
+    try {
+      final url = Uri.parse("https://fakestoreapi.com/products/$id");
+      final res = await http.get(url);
+      return ProductModel.fromJson(jsonDecode(res.body));
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
 }
 
 abstract class GetInfoNew {

@@ -22,14 +22,14 @@ class MyApp extends StatelessWidget {
         builder: (context, child) {
           return // Smart Refresher under the global configuration subtree, here are a few particularly important attributes
               RefreshConfiguration(
-                  headerBuilder: () => WaterDropMaterialHeader(
+                  headerBuilder: () => const WaterDropMaterialHeader(
                         backgroundColor: Style.colorOfPrice,
                       ), // Configure the default header indicator. If you have the same header indicator for each page, you need to set this
                   footerBuilder: () =>
-                      ClassicFooter(), // Configure default bottom indicator
+                      const ClassicFooter(), // Configure default bottom indicator
                   headerTriggerDistance:
                       80.0, // header trigger refresh trigger distance
-                  springDescription: SpringDescription(
+                  springDescription: const SpringDescription(
                       stiffness: 170,
                       damping: 16,
                       mass:
@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
                       false, // Disable pull-up to load more functionality when Viewport is less than one screen
                   enableBallisticLoad:
                       true, // trigger load more by BallisticScrollActivity
-                  child: MaterialApp(home: GeneralPage()));
+                  child: const MaterialApp(home: GeneralPage()));
         });
   }
 }
